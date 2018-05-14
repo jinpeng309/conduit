@@ -5,11 +5,12 @@ import ErrorBanner from './ErrorBanner.jsx';
 import MetricsTable from './MetricsTable.jsx';
 import PageHeader from './PageHeader.jsx';
 import { processSingleResourceRollup } from './util/MetricUtils.js';
+import PropTypes from 'prop-types';
 import React from 'react';
 import './../../css/list.css';
 import 'whatwg-fetch';
 
-export default class ResourceList extends React.Component {
+class ResourceList extends React.Component {
   constructor(props) {
     super(props);
     this.api = this.props.api;
@@ -117,3 +118,17 @@ export default class ResourceList extends React.Component {
       </div>);
   }
 }
+
+ResourceList.propTypes = {
+  api: PropTypes.shape({
+    cancelCurrentRequests: PropTypes.func.isRequired,
+    fetchMetrics: PropTypes.func.isRequired,
+    getCurrentPromises: PropTypes.func.isRequired,
+    setCurrentRequests: PropTypes.func.isRequired,
+    urlsForResource: PropTypes.func.isRequired,
+  }).isRequired,
+  controllerNamespace: PropTypes.string.isRequired,
+  resource: PropTypes.string.isRequired,
+};
+
+export default ResourceList;

@@ -5,11 +5,12 @@ import ErrorBanner from './ErrorBanner.jsx';
 import MetricsTable from './MetricsTable.jsx';
 import PageHeader from './PageHeader.jsx';
 import { processMultiResourceRollup } from './util/MetricUtils.js';
+import PropTypes from 'prop-types';
 import React from 'react';
 import './../../css/list.css';
 import 'whatwg-fetch';
 
-export default class Namespaces extends React.Component {
+class Namespaces extends React.Component {
   constructor(props) {
     super(props);
     this.api = this.props.api;
@@ -111,6 +112,29 @@ export default class Namespaces extends React.Component {
             {this.renderResourceSection("Pod", this.state.metrics.pods)}
           </div>
         }
-      </div>);
+      </div>
+    );
   }
 }
+
+Namespaces.defaultProps = {
+  params: {
+    namespace: 'default',
+  },
+};
+
+Namespaces.propTypes = {
+  api: PropTypes.shape({
+    cancelCurrentRequests: PropTypes.func.isRequired,
+    fetchMetrics: PropTypes.func.isRequired,
+    getCurrentPromises: PropTypes.func.isRequired,
+    setCurrentRequests: PropTypes.func.isRequired,
+    urlsForResource: PropTypes.object.isRequired, // TODO: generate a shape for this.
+  }).isRequired,
+  controllerNamespace: PropTypes.string.isRequired,
+  params: PropTypes.shape({
+    namespace: PropTypes.string,
+  }),
+};
+
+export default Namespaces;
