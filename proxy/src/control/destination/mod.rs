@@ -201,7 +201,7 @@ where
 
             match update {
                 Update::Insert(addr, meta) | Update::ChangeMetadata(addr, meta) => {
-                    let endpoint = Endpoint::new(addr, meta.dst_labels.clone());
+                    let endpoint = Endpoint::new(addr, meta);
 
                     let service = self.bind.bind(&endpoint).map_err(|_| ())?;
 
