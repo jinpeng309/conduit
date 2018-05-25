@@ -96,13 +96,13 @@ class ResourceList extends React.Component {
       <div className="page-content">
         { !this.state.error ? null : <ErrorBanner message={this.state.error} /> }
         { !this.state.loaded ? <ConduitSpinner />  :
-          <div>
-            <PageHeader header={friendlyTitle + "s"} />
-            <MetricsTable
-              resource={friendlyTitle}
-              metrics={this.state.metrics}
-              linkifyNsColumn={true} />
-          </div>
+        <div>
+          <PageHeader header={friendlyTitle + "s"} />
+          <MetricsTable
+            resource={friendlyTitle}
+            metrics={this.state.metrics}
+            linkifyNsColumn={true} />
+        </div>
         }
       </div>);
   }

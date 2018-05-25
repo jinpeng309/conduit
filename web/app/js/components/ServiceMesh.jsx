@@ -66,12 +66,14 @@ const namespacesColumns = ConduitLink => [
       return (
         <Tooltip
           overlayStyle={{ fontSize: "12px" }}
-          title={<div>
+          title={(
             <div>
-              {`${row.meshedPods} out of ${row.totalPods} running or pending pods are in the mesh (${row.meshedPercent.prettyRate()})`}
+              <div>
+                {`${row.meshedPods} out of ${row.totalPods} running or pending pods are in the mesh (${row.meshedPercent.prettyRate()})`}
+              </div>
+              {row.failedPods === 0 ? null : <div>{ `${row.failedPods} failed pods` }</div>}
             </div>
-            {row.failedPods === 0 ? null : <div>{ `${row.failedPods} failed pods` }</div>}
-          </div>}>
+            )}>
           <div className={"container-bar " + barType} style={{width: containerWidth}}>
             <div className={"inner-bar " + barType} style={{width: barWidth}}>&nbsp;</div>
           </div>
@@ -108,9 +110,7 @@ class ServiceMesh extends React.Component {
 
     this.state = {
       pollingInterval: 2000,
-      metrics: [],
       components: [],
-      lastUpdated: 0,
       pendingRequests: false,
       loaded: false,
       error: ''
@@ -125,6 +125,15 @@ class ServiceMesh extends React.Component {
   componentWillUnmount() {
     window.clearInterval(this.timerId);
     this.api.cancelCurrentRequests();
+  }
+
+  getServiceMeshDetails() {
+    return [
+      { key: 1, name: "Conduit version", value: this.props.releaseVersion },
+      { key: 2, name: "Conduit namespace", value: this.props.controllerNamespace },
+      { key: 3, name: "Control plane components", value: this.componentCount() },
+      { key: 4, name: "Data plane proxies", value: this.proxyCount() }
+    ];
   }
 
   extractNsStatuses(nsData) {
@@ -180,7 +189,6 @@ class ServiceMesh extends React.Component {
         this.setState({
           components: this.processComponents(conduitPods),
           nsStatuses: this.extractNsStatuses(nsStats),
-          lastUpdated: Date.now(),
           pendingRequests: false,
           loaded: true,
           error: ''
@@ -208,15 +216,6 @@ class ServiceMesh extends React.Component {
     return _.sumBy(this.state.nsStatuses, d => {
       return d.namespace === this.props.controllerNamespace ? 0 : d.meshedPods;
     });
-  }
-
-  getServiceMeshDetails() {
-    return [
-      { key: 1, name: "Conduit version", value: this.props.releaseVersion },
-      { key: 2, name: "Conduit namespace", value: this.props.controllerNamespace },
-      { key: 3, name: "Control plane components", value: this.componentCount() },
-      { key: 4, name: "Data plane proxies", value: this.proxyCount() }
-    ];
   }
 
   renderControlPlaneDetails() {
@@ -310,23 +309,23 @@ class ServiceMesh extends React.Component {
       <div className="page-content">
         { !this.state.error ? null : <ErrorBanner message={this.state.error} /> }
         { !this.state.loaded ? <ConduitSpinner /> :
-          <div>
-            <PageHeader
-              header="Service mesh overview"
-              hideButtons={this.proxyCount() === 0} />
+        <div>
+          <PageHeader
+            header="Service mesh overview"
+            hideButtons={this.proxyCount() === 0} />
 
-            {this.proxyCount() === 0 ?
-              <CallToAction
-                numResources={_.size(this.state.nsStatuses)}
-                resource="namespace" /> : null}
+          {this.proxyCount() === 0 ?
+            <CallToAction
+              numResources={_.size(this.state.nsStatuses)}
+              resource="namespace" /> : null}
 
-            <Row gutter={16}>
-              <Col span={16}>{this.renderControlPlaneDetails()}</Col>
-              <Col span={8}>{this.renderServiceMeshDetails()}</Col>
-            </Row>
+          <Row gutter={16}>
+            <Col span={16}>{this.renderControlPlaneDetails()}</Col>
+            <Col span={8}>{this.renderServiceMeshDetails()}</Col>
+          </Row>
 
-            {this.renderNamespaceStatusTable()}
-          </div>
+          {this.renderNamespaceStatusTable()}
+        </div>
         }
       </div>
     );

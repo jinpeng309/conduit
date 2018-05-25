@@ -101,13 +101,13 @@ class Namespaces extends React.Component {
       <div className="page-content">
         { !this.state.error ? null : <ErrorBanner message={this.state.error} /> }
         { !this.state.loaded ? <ConduitSpinner />  :
-          <div>
-            <PageHeader header={`Namespace: ${this.state.ns}`} />
-            { noMetrics ? <div>No resources detected.</div> : null}
-            {this.renderResourceSection("Deployment", this.state.metrics.deployments)}
-            {this.renderResourceSection("Replication Controller", this.state.metrics.replicationcontrollers)}
-            {this.renderResourceSection("Pod", this.state.metrics.pods)}
-          </div>
+        <div>
+          <PageHeader header={`Namespace: ${this.state.ns}`} />
+          { noMetrics ? <div>No resources detected.</div> : null}
+          {this.renderResourceSection("Deployment", this.state.metrics.deployments)}
+          {this.renderResourceSection("Replication Controller", this.state.metrics.replicationcontrollers)}
+          {this.renderResourceSection("Pod", this.state.metrics.pods)}
+        </div>
         }
       </div>);
   }

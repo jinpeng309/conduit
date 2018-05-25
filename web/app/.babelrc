@@ -1,6 +1,6 @@
 {
     "presets":[
-        "env", "react-app"
+        "env", "react-app", "airbnb"
     ],
     "plugins": [
         ["import", { "libraryName": "antd", "style": "css" }], // `style: true` for less

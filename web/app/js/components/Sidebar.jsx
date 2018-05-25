@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ApiHelpers } from './util/ApiHelpers.jsx';
-import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
 import logo from './../../img/logo_only.png';
 import React from 'react';
@@ -8,7 +7,7 @@ import SocialLinks from './SocialLinks.jsx';
 import Version from './Version.jsx';
 import { withContext } from './util/AppContext.jsx';
 import wordLogo from './../../img/reversed_logo.png';
-import { Icon, Menu } from 'antd';
+import { Icon, Layout, Menu } from 'antd';
 import './../../css/sidebar.css';
 
 class Sidebar extends React.Component {
@@ -117,6 +116,7 @@ class Sidebar extends React.Component {
           <div className={`sidebar-menu-header ${this.state.collapsed ? "collapsed" : ""}`}>
             <ConduitLink to="/servicemesh">
               <img
+                alt="Conduit logo"
                 src={this.state.collapsed ? logo : wordLogo}
                 onError={e => {
                   // awful hack to deal with the fact that we don't serve assets off absolute paths
@@ -176,25 +176,25 @@ class Sidebar extends React.Component {
             </Menu.Item>
 
             { this.state.isLatest ? null :
-              <Menu.Item className="sidebar-menu-item" key="/update">
-                <Link to="https://versioncheck.conduit.io/update" target="_blank">
-                  <Icon type="exclamation-circle-o" className="update" />
-                  <span>Update Conduit</span>
-                </Link>
-              </Menu.Item>
+            <Menu.Item className="sidebar-menu-item" key="/update">
+              <Link to="https://versioncheck.conduit.io/update" target="_blank">
+                <Icon type="exclamation-circle-o" className="update" />
+                <span>Update Conduit</span>
+              </Link>
+            </Menu.Item>
             }
           </Menu>
 
           { this.state.collapsed ? null :
-            <div className="sidebar-menu-footer">
-              <SocialLinks />
-              <Version
-                isLatest={this.state.isLatest}
-                latest={this.state.latestVersion}
-                releaseVersion={this.props.releaseVersion}
-                error={this.state.error}
-                uuid={this.props.uuid} />
-            </div>
+          <div className="sidebar-menu-footer">
+            <SocialLinks />
+            <Version
+              isLatest={this.state.isLatest}
+              latest={this.state.latestVersion}
+              releaseVersion={this.props.releaseVersion}
+              error={this.state.error}
+              uuid={this.props.uuid} />
+          </div>
           }
         </div>
       </Layout.Sider>
